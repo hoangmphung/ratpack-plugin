@@ -53,8 +53,8 @@ class RatpackPlugin
     project.dependencies {
       provided 'javax.servlet:servlet-api:2.5'
       runtime 'org.slf4j:slf4j-simple:1.6.3'
-      runtime "com.augusttechgroup:ratpack-core:0.5-SNAPSHOT"
-      ratpack "com.augusttechgroup:ratpack-core:0.5-SNAPSHOT"
+      runtime "com.augusttechgroup:ratpack-core:0.5"
+      ratpack "com.augusttechgroup:ratpack-core:0.5"
     }
     
     project.sourceSets {
@@ -104,7 +104,9 @@ class RatpackPlugin
     project.jettyRunWar {
       group = 'Ratpack'
       contextPath = '/'
-      httpPort = 5000
+
+if ( System.getenv("PORT") != null && System.getenv("PORT") != '' )
+      httpPort = Integer.valueOf(System.getenv("PORT"))
     }
 
     // TODO jettyRun is broken for now. Will have to unpack parts of the core JAR for it to work
@@ -116,7 +118,8 @@ class RatpackPlugin
       classpath += project.sourceSets.app.groovy + project.sourceSets.app.resources
       webXml = project.file("${project.prepareWarResources.webXmlFilename}/web.xml")
       contextPath = '/'
-      httpPort = 5000
+if ( System.getenv("PORT") != null && System.getenv("PORT") != '' )
+      httpPort = Integer.valueOf(System.getenv("PORT"))
     }
 
     project.task('runRatpack', type: JavaExec) {
